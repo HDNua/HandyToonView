@@ -1,3 +1,15 @@
+////////////////////////////////////////////////////////////////////
+// File Name : MainWindow.cpp
+// Date : 2016/04/23
+// Compiler : g++ 4.6.3
+// Os : Ubuntu 12.04.4 LTS
+// Author : DoYeong Han
+// =================================================================
+// ver : 2.0.0
+// Description : MainWindow Implementation
+// Etc.. : 어디까지가 버전 1인지 아닌지 모르겠어서 그냥 이전까지를
+//  다 1로 치고 지금부터 2버전으로 간다
+////////////////////////////////////////////////////////////////////
 #include "mainwindow.h"
 
 #include <Qt>
@@ -17,37 +29,64 @@
 #define ADD_ACTION_TO_MENU_WITH_SHORTCUT(MENU, ACTION_NAME, SIG, SLT, SC) \
     ADD_ACTION_TO_MENU(MENU, ACTION_NAME, SIG, SLT); action->setShortcut(SC)
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-{
-    /******* 기본 값 설정 *******/
-    this->BasicValueSetting();
 
-    /******* 메뉴 *******/
-    this->MenuSetting();
 
-    /******* 이미지 목록 관리 *******/
-    this->ImageListInit();
+////////////////////////////////////////////////////////////////////
+// MainWindow::MainWindow
+// -----------------------------------------------------------------
+// Purpose:
+//  constructor
+// Input:
+//  (QWidget *parent) -> parent widget object
+////////////////////////////////////////////////////////////////////
+MainWindow::MainWindow(QWidget *parent): QMainWindow(parent) {
+    this->initWindow();
+    this->initMenu();
 
-    /******* 이미지 출력 *******/
-    this->ImagePrintInit();
+    this->initFields();
+    this->initImageList();
+    this->initControl();
+}
+////////////////////////////////////////////////////////////////////
+// MainWindow::~MainWindow
+// -----------------------------------------------------------------
+// Purpose:
+//  destructor
+////////////////////////////////////////////////////////////////////
+MainWindow::~MainWindow() {
+
 }
 
-MainWindow::~MainWindow()
-{
 
-}
 
-// 내부 메서드
-void MainWindow::BasicValueSetting()
-{
+////////////////////////////////////////////////////////////////////
+// MainWindow::initWindow
+// -----------------------------------------------------------------
+// Purpose:
+//  <describe here>
+// Input:
+//  <describe here>
+// Return:
+//  <describe here>
+////////////////////////////////////////////////////////////////////
+void MainWindow::initWindow() {
     this->showMaximized();
     this->setMaximumSize(1215, 747);
     this->setMinimumSize(this->maximumSize());
-
-    std::cout<<this->maximumHeight()<<std::endl;
-
-//    this->setBackgroundRole(QPalette::color());
+///    std::cout<<this->maximumHeight()<<std::endl;
+///    this->setBackgroundRole(QPalette::color());
+}
+////////////////////////////////////////////////////////////////////
+// MainWindow::initFields
+// -----------------------------------------------------------------
+// Purpose:
+//  <describe here>
+// Input:
+//  <describe here>
+// Return:
+//  <describe here>
+////////////////////////////////////////////////////////////////////
+void MainWindow::initFields() {
     _dir = "/home";
     _fd = new QFileDialog(this);
     _fd->setDirectory(_dir);
@@ -55,10 +94,19 @@ void MainWindow::BasicValueSetting()
     // 확장자 설정
     _filters << "Image files (*.png *.xpm *.jpg)";
     _fd->setNameFilters(_filters);
-//    _fd->setOption(QFileDialog::ShowDirsOnly, true);
+///    _fd->setOption(QFileDialog::ShowDirsOnly, true);
 }
-void MainWindow::MenuSetting()
-{
+////////////////////////////////////////////////////////////////////
+// MainWindow::initMenu
+// -----------------------------------------------------------------
+// Purpose:
+//  <describe here>
+// Input:
+//  <describe here>
+// Return:
+//  <describe here>
+////////////////////////////////////////////////////////////////////
+void MainWindow::initMenu() {
     QMenu *menu;
     QAction *action;
 
@@ -69,7 +117,7 @@ void MainWindow::MenuSetting()
     _menuBar->addMenu(menu);
 //    ADD_ACTION_TO_MENU(menu, "&Open", triggered(), open());
 //    ADD_ACTION_TO_MENU(menu, "E&xit", triggered(), close());
-    ADD_ACTION_TO_MENU_WITH_SHORTCUT(menu, "&Open", triggered(), open(), QKeySequence::Open);
+    ADD_ACTION_TO_MENU_WITH_SHORTCUT(menu, "&Open", triggered(), slotOpen(), QKeySequence::Open);
     ADD_ACTION_TO_MENU_WITH_SHORTCUT(menu, "E&xit", triggered(), close(), QKeySequence::Quit);
 
     menu->addSeparator();
@@ -77,24 +125,59 @@ void MainWindow::MenuSetting()
     menu = new QMenu(tr("&Setting"));
     _menuBar->addMenu(menu);
 
-    ADD_ACTION_TO_MENU(menu, "De&veloper", triggered(), developer());
+    ADD_ACTION_TO_MENU(menu, "De&veloper", triggered(), slotDeveloper());
 }
-void MainWindow::ImageListInit()
-{
+////////////////////////////////////////////////////////////////////
+// MainWindow::initImageList
+// -----------------------------------------------------------------
+// Purpose:
+//  <describe here>
+// Input:
+//  <describe here>
+// Return:
+//  <describe here>
+////////////////////////////////////////////////////////////////////
+void MainWindow::initImageList() {
     _first = -1;
     _last = -1;
     _index = -1;
     _list = 0;
 }
-void MainWindow::ImagePrintInit()
-{
+////////////////////////////////////////////////////////////////////
+// MainWindow::initControl
+// -----------------------------------------------------------------
+// Purpose:
+//  <describe here>
+// Input:
+//  <describe here>
+// Return:
+//  <describe here>
+////////////////////////////////////////////////////////////////////
+void MainWindow::initControl() {
     _node = new QLabel(this);
     _image = new QImage();
 }
 
-// 추가 메서드
-void MainWindow::glance()
-{
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////
+// MainWindow::glance
+// -----------------------------------------------------------------
+// Purpose:
+//  glance entry list before traverse
+// Input:
+//  none
+// Return:
+//  none
+////////////////////////////////////////////////////////////////////
+void MainWindow::glance() {
 
 //    const char *str = _dir.path().toUtf8();
 //    std::cout<<str<<std::endl;
@@ -114,7 +197,7 @@ void MainWindow::glance()
     std::cout<<"Enumberate End"<<std::endl;
     */
 
-    _last  = _entryList.count() - 2;            // ., ..과 같은 것도 경로로 치는 모양이다.
+    _last  = _entryList.count() - 2; // ., ..과 같은 것도 경로로 치는 모양이다.
     _index = _entryList.indexOf(_fileName);
     _first = _index;
 
@@ -122,8 +205,17 @@ void MainWindow::glance()
     std::cout<<"Index: "<<_index<<std::endl;
     std::cout<<"Last : "<<_last<<std::endl;
 }
-void MainWindow::printImage()
-{
+////////////////////////////////////////////////////////////////////
+// MainWindow::printImage
+// -----------------------------------------------------------------
+// Purpose:
+//  <describe here>
+// Input:
+//  <describe here>
+// Return:
+//  <describe here>
+////////////////////////////////////////////////////////////////////
+void MainWindow::printImage() {
     QString fileName = _entryList.value(_index);
 //    const char *str = fileName.toUtf8();
 //    std::cout<<str<<std::endl;
@@ -158,8 +250,17 @@ void MainWindow::printImage()
         _node->show();
     }
 }
-void MainWindow::changeImageToLeft()
-{
+////////////////////////////////////////////////////////////////////
+// MainWindow::changeImageToLeft
+// -----------------------------------------------------------------
+// Purpose:
+//  change showing image to left
+// Input:
+//  none
+// Return:
+//  none
+////////////////////////////////////////////////////////////////////
+void MainWindow::changeImageToLeft() {
     if( --_index<_first )
         _index = _last;
 
@@ -168,8 +269,17 @@ void MainWindow::changeImageToLeft()
     std::cout<<"Last : "<<_last<<std::endl;
     this->printImage();
 }
-void MainWindow::changeImageToRight()
-{
+////////////////////////////////////////////////////////////////////
+// MainWindow::changeImageToRight
+// -----------------------------------------------------------------
+// Purpose:
+//  change showing image to right
+// Input:
+//  none
+// Return:
+//  none
+////////////////////////////////////////////////////////////////////
+void MainWindow::changeImageToRight() {
     if( ++_index>_last)
         _index = _first;
 
@@ -179,59 +289,90 @@ void MainWindow::changeImageToRight()
     this->printImage();
 }
 
-// 이벤트 처리
-void MainWindow::keyPressEvent(QKeyEvent *event)
-{
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////
+// virtual MainWindow::keyPressEvent
+// -----------------------------------------------------------------
+// Purpose:
+//  key event handler
+// Input:
+//  (QKeyEvent *event) -> key press event object
+// Return:
+//  none
+////////////////////////////////////////////////////////////////////
+void MainWindow::keyPressEvent(QKeyEvent *event) {
     int key = event->key();
+    switch (key) {
+        case Qt::Key_Up:
+            this->showMaximized();
+            break;
+        case Qt::Key_Right:
+            this->changeImageToRight();
+            break;
+        case Qt::Key_Down:
+            this->showMinimized();
+            break;
+        case Qt::Key_Left:
+            this->changeImageToLeft();
+            break;
 
-//    std::cout<<key<<std::endl;
-//    printf("%0x\n", key);
-
-    switch (key)
-    {
-    // 방향키에 대한 이벤트 설정
-    case Qt::Key_Up:
-//        std::cout<<"Up"<<std::endl;
-        this->showMaximized();
-        break;
-    case Qt::Key_Right:
-//        std::cout<<"Right"<<std::endl;
-        this->changeImageToRight();
-        break;
-    case Qt::Key_Down:
-//        std::cout<<"Down"<<std::endl;
-        this->showMinimized();
-        break;
-    case Qt::Key_Left:
-//        std::cout<<"Left"<<std::endl;
-        this->changeImageToLeft();
-        break;
-
-    // 기타 키에 대한 이벤트
-    case Qt::Key_Return:
-    case Qt::Key_Enter:
-//        std::cout<<"Enter"<<std::endl;
-        this->process_open();
-        break;
+        case Qt::Key_Return:
+        case Qt::Key_Enter:
+            this->beginView();
+            break;
     }
 }
-/*
-void MainWindow::resizeEvent(QResizeEvent *event)
-{
+////////////////////////////////////////////////////////////////////
+// virtual MainWindow::resizeEvent
+// -----------------------------------------------------------------
+// Purpose:
+//  resize event handler
+// Input:
+//  (QResizeEvent *event) -> resize event object
+// Return:
+//  none
+////////////////////////////////////////////////////////////////////
+void MainWindow::resizeEvent(QResizeEvent *event) {
     QSize size = event->size();
-
     std::cout<<size.width()<<std::endl;
     std::cout<<size.height()<<std::endl;
 
-    // (1215, 747) / (1215, 776)
-}*/
+/// (1215, 747) / (1215, 776)
+}
 
-// 슬롯에 대한 함수
-void MainWindow::process_open()
-{
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////
+// MainWindow::beginView
+// -----------------------------------------------------------------
+// Purpose:
+//  begin to view manga
+// Input:
+//  none
+// Return:
+//  none
+////////////////////////////////////////////////////////////////////
+void MainWindow::beginView() {
     QString filePath = _fd->getOpenFileName(this);
-    if( !filePath.isNull() )
-    {
+
+
+
+    if( !filePath.isNull() ) {
         QDir dir = QFileInfo(filePath).absoluteDir();
         _dir = dir;
         _fileName = _dir.relativeFilePath(filePath);
@@ -240,16 +381,44 @@ void MainWindow::process_open()
         this->printImage();
     }
 }
-void MainWindow::print_developer()
-{
+////////////////////////////////////////////////////////////////////
+// MainWindow::printDeveloper
+// -----------------------------------------------------------------
+// Purpose:
+//  <describe here>
+// Input:
+//  none
+// Return:
+//  none
+////////////////////////////////////////////////////////////////////
+void MainWindow::printDeveloper() {
+
 }
 
-// 슬롯 메서드
-void MainWindow::open()
-{
-    this->process_open();
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////
+// MainWindow::slotOpen
+// -----------------------------------------------------------------
+// Purpose:
+//  slot method; open menu item clicked
+////////////////////////////////////////////////////////////////////
+void MainWindow::slotOpen() {
+    this->beginView();
 }
-void MainWindow::developer()
-{
-    this->print_developer();
+////////////////////////////////////////////////////////////////////
+// MainWindow::slotDeveloper
+// -----------------------------------------------------------------
+// Purpose:
+//  slot method; open developer dialog
+////////////////////////////////////////////////////////////////////
+void MainWindow::slotDeveloper() {
+    this->printDeveloper();
 }

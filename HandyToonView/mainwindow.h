@@ -1,3 +1,15 @@
+////////////////////////////////////////////////////////////////////
+// File Name : MainWindow.h
+// Date : 2016/04/23
+// Compiler : g++ 4.6.3
+// Os : Ubuntu 12.04.4 LTS
+// Author : DoYeong Han
+// =================================================================
+// ver : 2.0.0
+// Description : MainWindow declaration
+// Etc.. : 어디까지가 버전 1인지 아닌지 모르겠어서 그냥 이전까지를
+//  다 1로 치고 지금부터 2버전으로 간다
+////////////////////////////////////////////////////////////////////
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -13,6 +25,18 @@ class QFileDialog;
 class QString;
 class QStringList;
 
+
+
+////////////////////////////////////////////////////////////////////
+// template
+// -----------------------------------------------------------------
+// Purpose:
+//  <describe here>
+// Input:
+//  <describe here>
+// Return:
+//  <describe here>
+////////////////////////////////////////////////////////////////////
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -42,10 +66,18 @@ private:
 
 private:
     // 초기화 함수
-    void BasicValueSetting();
-    void MenuSetting();
-    void ImageListInit();
-    void ImagePrintInit();
+    void initWindow();
+    void initMenu();
+    void initImageList();
+    void initControl();
+
+
+
+    void initFields();
+
+
+
+
 
 public:
     MainWindow(QWidget *parent = 0);
@@ -59,17 +91,17 @@ public:
 
     // 이벤트 처리
     void keyPressEvent(QKeyEvent *event);
-//    void resizeEvent(QResizeEvent *event);
+    void resizeEvent(QResizeEvent *event);
 
 public:
     // 슬롯에 대한 함수
-    void process_open();
-    void print_developer();
+    void beginView();
+    void printDeveloper();
 
 public slots:
     // 슬롯 함수
-    void open();    // 파일 오픈 슬롯
-    void developer();
+    void slotOpen();    // 파일 오픈 슬롯
+    void slotDeveloper();
 };
 
 #endif // MAINWINDOW_H

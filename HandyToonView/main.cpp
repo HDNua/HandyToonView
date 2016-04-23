@@ -1,3 +1,15 @@
+////////////////////////////////////////////////////////////////////
+// File Name : main.cpp
+// Date : 2016/04/23
+// Compiler : g++ 4.6.3
+// Os : Ubuntu 12.04.4 LTS
+// Author : DoYeong Han
+// =================================================================
+// ver : 2.0.0
+// Description :
+// Etc.. : 어디까지가 버전 1인지 아닌지 모르겠어서 그냥 이전까지를
+//  다 1로 치고 지금부터 2버전으로 간다
+////////////////////////////////////////////////////////////////////
 #include <QtGui/QApplication>
 #include "mainwindow.h"
 
@@ -15,12 +27,22 @@
 
   *****************************************************************************/
 
-int main(int argc, char *argv[])
-{
+
+
+////////////////////////////////////////////////////////////////////
+// main
+// -----------------------------------------------------------------
+// Purpose:
+//  execute qt application
+// Input:
+//  (int argc) -> argument count
+//  (char *argv[]) -> argument vector
+// Return:
+//  0 when succeeded, non-zero when failed
+////////////////////////////////////////////////////////////////////
+int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
     MainWindow w;
     w.show();
-
     return a.exec();
 }
-
